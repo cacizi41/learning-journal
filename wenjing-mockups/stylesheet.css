@@ -1,0 +1,21 @@
+body {
+    font-family:Roboto;
+}
+
+ul li {
+    list-style-type: none;
+}
+
+.link{
+    color: #30530D;
+    text-align: center;
+}
+
+.input-form {
+    color: blue;
+}
+
+
+#new-post {
+    color: red;
+}

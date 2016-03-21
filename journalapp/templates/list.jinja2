@@ -2,7 +2,7 @@
 
 {% block content %}
 
-     <a href="{{request.route_url('add')}}">NewEntry</a>
+     <a href="{{request.route_url('add')}}"><h3>NewEntry</h3></a>
 
     {% for entry in entries %}
 
@@ -12,7 +12,7 @@
             </a>
         </h4>
 
-        <p>{{entry.created.strftime('%Y-%m-%d at %H:%M UTC')}}</p>
+        <h4>{{entry.created.strftime('%Y-%m-%d at %H:%M UTC')}}</h4>
 
         </br>
     {% endfor %}
