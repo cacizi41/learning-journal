@@ -42,3 +42,11 @@ class Entry(Base):
     title = Column(String(128), unique=True)
     text = Column(Text)
     created = Column(DateTime, default=datetime.datetime.utcnow)
+
+
+class DefaultRoot(object):
+    __acl__ = [
+        (Allow, Everyone, 'view'),
+        (Allow, Authenticated, 'add'),
+        (Allow, Authenticated, 'edit')
+        ]

@@ -2,21 +2,30 @@
 from jinja2 import Markup
 import transaction
 from pyramid.response import Response
-from pyramid.view import view_config
+from pyramid.view import (
+    view_config,
+    forbidden_view_config,
+    )
+from .security import USERS
 from pyramid.httpexceptions import HTTPFound
-
+from pyramid.authentication import AuthTktAuthenticationPolicy
+from pyramid.authorization import ACLAuthorizationPolicy
+from cryptacular.bcrypt import BCRYPTPasswordManager
+from pyramid.security import remember, forget
 from sqlalchemy.exc import DBAPIError
-
+from pyramid.security import (
+    remember,
+    forget,
+    )
 from .models import (
     DBSession,
     Entry,
-)
-
+    )
 from journalapp.forms import EntryForm
 import markdown
 
 
-@view_config(route_name='list', renderer='templates/list.jinja2')
+@view_config(route_name='list', renderer='templates/list.jinja2', permission='view')
 def list_view(request):
     """Return rendered list of entries for journal home page."""
     try:
@@ -28,7 +37,7 @@ def list_view(request):
                         status_int=500)
 
 
-@view_config(route_name='detail', renderer='templates/detail.jinja2')
+@view_config(route_name='detail', renderer='templates/detail.jinja2', permission='view')
 def detail_view(request):
     """Return rendered single entry for entry detail page."""
     try:
@@ -41,11 +50,10 @@ def detail_view(request):
                         status_int=500)
 
 
-@view_config(route_name='add', renderer='templates/add-edit.jinja2')
+@view_config(route_name='add', renderer='templates/add-edit.jinja2', permission='add')
 def add_entry(request):
     """Display a empty form, when submitted, return to the detail page."""
     form = EntryForm(request.POST)
-    # import pdb; pdb.set_trace()
     if request.method == "POST" and form.validate():
         new_entry = Entry(title=form.title.data, text=form.text.data)
         DBSession.add(new_entry)
@@ -57,7 +65,7 @@ def add_entry(request):
     return {'form': form}
 
 
-@view_config(route_name='edit', renderer='templates/add-edit.jinja2')
+@view_config(route_name='edit', renderer='templates/add-edit.jinja2', permission='edit')
 def edit_entry(request):
     """Display editing page to edit entries, return to detail page."""
     try:
@@ -79,6 +87,26 @@ def edit_entry(request):
                         status_int=500)
 
 
+# @view_config(route_name='login', renderer='templates/login.jinja2')
+# @forbidden_view_config(renderer='templates/login.jinja2')
+# def login(request):
+#     """User login."""
+#     username = request.params.get('username', None)
+#     password = request.params.get('password', None)
+#     if not (username and password):
+#         raise ValueError('both username and password are required')
+
+#     settings = request.registry.settings
+#     manager = BCRYPTPasswordManager()
+#     if username == settings.get('auth.username', ''):
+#         hashed = settings.get('auth.password', '')
+#         return manager.check(hashed, password)
+#     return False
+
+# @view_config(route_name='logout', renderer='templates/logout.jinja2')
+# def login_view(request):
+
+
 def render_markdown(content, linenums=False, pygments_style='default'):
     """Jinja2 filter to render markdown text. Copied but no understood."""
     ext = "codehilite(linenums={linenums}, pygments_style={pygments_style})"
@@ -88,6 +116,9 @@ def render_markdown(content, linenums=False, pygments_style='default'):
             extensions=[ext.format(**locals()), 'fenced_code'])
     )
     return output
+
+
+
 
 
 CONN_ERR_MSG = """\
