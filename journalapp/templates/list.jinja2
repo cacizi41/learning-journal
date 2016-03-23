@@ -2,8 +2,6 @@
 
 {% block content %}
 
-     <a href="{{request.route_url('add')}}"><h3>NewEntry</h3></a>
-
     {% for entry in entries %}
 
         <h4>
@@ -11,10 +9,8 @@
             {{entry.title}}
             </a>
         </h4>
-
         <h4>{{entry.created.strftime('%Y-%m-%d at %H:%M UTC')}}</h4>
 
-        </br>
     {% endfor %}
 
 {% endblock %}

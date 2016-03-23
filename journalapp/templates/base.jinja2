@@ -4,17 +4,19 @@
 <head>
   <title>Learning Journal</title>
   <link href="./static/theme.css" rel="stylesheet">
+  <link href="./static/layout.css" rel="stylesheet">
 </head>
+
 <body>
+    <header>
+        <h1>Welcome to the Learning Journal<h1>
+    </header>
+    <div class='link'>
+        <a href="/"><h3>Home</h3></a>
+        <a href="/login"><h3>Login</h3></a>
+        <a href="/add"><h3>New Journal<h3></a>
+    </div>
 
-<div class='link'>
-  <a href="/"><h2>Home</h2></a>
-  <a href="/add"><h2>New Journal<h2></a>
-</div>
-
-<div><a href="{{request.route_url('login')}}"><h3>Login</h3></a></div>
-
-<h1>Welcome to the Learning Journal</h1>
 
 {% block content %}
 

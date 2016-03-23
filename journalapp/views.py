@@ -87,8 +87,9 @@ def edit_entry(request):
                         status_int=500)
 
 
-# @view_config(route_name='login', renderer='templates/login.jinja2')
-# def login(request):
+@view_config(route_name='login', renderer='templates/login.jinja2')
+def login(request):
+    pass
 #     """User login."""
 #     if request.method == 'POST':
 #         error = "Login Failed"
