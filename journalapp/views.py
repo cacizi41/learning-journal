@@ -1,4 +1,5 @@
 """SQLAlchemy views to render learning journal."""
+import os
 from jinja2 import Markup
 import transaction
 from pyramid.response import Response
@@ -21,7 +22,8 @@ from .models import (
     DBSession,
     Entry,
     )
-from journalapp.forms import EntryForm
+from journalapp.forms import EntryForm, LoginForm
+from .security import check_password
 import markdown
 
 
@@ -87,33 +89,35 @@ def edit_entry(request):
                         status_int=500)
 
 
-@view_config(route_name='login', renderer='templates/login.jinja2')
+@view_config(route_name='login', renderer='templates/login.jinja2', permission='view')
 def login(request):
-    pass
-#     """User login."""
-#     if request.method == 'POST':
-#         error = "Login Failed"
-#         authenticated = False
-#         username = request.params.get('username', None)
-#         password = request.params.get('password', None)
-#         if not (username and password):
-#         raise ValueError('both username and password are required')
+    """User login."""
+    form = LoginForm(request.POST)
+    if request.method == 'POST':
+        username = request.params.get('username', '')
+        password = request.params.get('password', '')
+        if not (username and password):
+            raise ValueError('both username and password are required')
+        authenticated_username = os.environ.get('AUTH_USERNAME', '')
+        authenticated_password = os.environ.get('AUTH_PASSWORD', '')
+        if username == authenticated_username:
+            if password == authenticated_password:
+                headers = remember(request, username)
+                return HTTPFound(location='/', headers=headers)
+            else:
+                print('pwd Failed')
+        else:
+            print('usr Failed')
+    else:
+        message = 'Please Login'
+    return {'form': form}
 
-#         if check_password(password):
-#             headers = remember(request, username)
-#             return HTTPFound(location='/list', headers=headers)
-#         raise HTTPForbidden()
-#     raise ValueError('both username and password are required')
 
-    # settings = request.registry.settings
-    # manager = BCRYPTPasswordManager()
-    # if username == settings.get('auth.username', ''):
-    #     hashed = settings.get('auth.password', '')
-    #     return manager.check(hashed, password)
-    # return False
-
-# @view_config(route_name='logout', renderer='templates/logout.jinja2')
-# def login_view(request):
+@view_config(route_name='logout', renderer='templates/list.jinja2')
+def logout_view(request):
+    """Logout the user."""
+    headers = forget(request)
+    return HTTPFound(location='/', headers=headers)
 
 
 def render_markdown(content, linenums=False, pygments_style='default'):

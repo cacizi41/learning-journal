@@ -1,7 +1,7 @@
 """Define WTForm classes for adding and editing Entries into database."""
 
 from wtforms.validators import Length, InputRequired
-from wtforms import Form, StringField, TextAreaField
+from wtforms import Form, StringField, TextAreaField, PasswordField
 
 
 class EntryForm(Form):
@@ -18,3 +18,13 @@ class EntryForm(Form):
          ])
 
 
+class LoginForm(Form):
+    username = StringField(
+        'Username',
+        [Length(max=255, message='Your title is too long.'),
+         InputRequired(message='Title is required.')
+         ])
+    password = PasswordField(
+        'Password',
+        [InputRequired(message='Password is required.')
+         ])
