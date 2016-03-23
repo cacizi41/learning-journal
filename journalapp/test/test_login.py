@@ -26,13 +26,13 @@ def auth_env():
     """Authtication env seup."""
     # from journalapp.security import check_password
     os.environ['AUTH_PASSWORD'] = pwd_context.encrypt('testpassword')
-    os.environ['AUTH_USERNAME'] = 'Authenticated'
+    os.environ['AUTH_USERNAME'] = 'admin'
 
 
 @pytest.fixture()
 def authenticated_app(app, auth_env):
     """Authenticated user input."""
-    user_input = {'username': 'Authenticated', 'password': 'testpassword'}
+    user_input = {'username': 'admin', 'password': 'testpassword'}
     app.post('/add', user_input)
 
 def test_access_to_home(app, dbtransaction):
@@ -79,18 +79,18 @@ def test_store_pwd_true(app):
     assert os.environ.get('AUTH_PASSWORD', None) is not None
 
 
-# def test_post_login_permission(app, auth_env):
-#     """Test weather user can visit add page w/ right usrname and pwd."""
-#     user_input = {'username': 'Authenticated', 'password': 'testpassword'}
-#     response = app.post('/add', user_input)
-#     assert response.status_code == 200
+def test_post_login_view(app, auth_env):
+    """Test weather user can visit add page w/ right usrname and pwd."""
+    user_input = {'username': 'admin', 'password': 'testpassword'}
+    response = app.post('/login', user_input)
+    assert response.status_code == 302
 
 
-# def test_post_login_fail(app, auth_env):
-#     """Test weather user can visit add page w/ wrong usrname and pwd."""
-#     user_input = {'username': 'Authenticated', 'password': 'teapassword'}
-#     response = app.post('/add', user_input)
-#     assert response.status_code == 403
+def test_post_login_fail(app, auth_env):
+    """Test weather user can visit add page w/ wrong usrname and pwd."""
+    user_input = {'username': 'admin', 'password': 'teapassword'}
+    response = app.post('/login', user_input)
+    assert response.status_code == 200
 
-
+# def
 
