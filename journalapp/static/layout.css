@@ -1,0 +1,23 @@
+.links {
+    border-radius: 5px;
+    margin-bottom: 1%;
+    display: inline;
+    padding: 3%;
+    font-size: 1em;
+    text-align: center;
+}
+
+
+.link {
+    text-align: inline;
+    background-color: #D44C46;
+    border-radius: 5px;
+    padding: 1%;
+}
+
+h1 {
+    padding-top: 1%;
+    font-weight: bold;
+    font-size: 3em;
+}
+

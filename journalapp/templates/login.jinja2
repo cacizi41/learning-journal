@@ -1,0 +1,20 @@
+{% extends "base.jinja2" %}
+
+{% block content %}
+
+
+<h3>Login</h3>
+    <form action="/login" method="POST">
+        <div>
+            {{form.username}}
+        </div>
+        <div>
+            {{form.password}}
+        </div>
+        <div>
+            <input type="submit" name="Log in" value="Log in">
+        </div>
+    </form>
+
+
+{% endblock %}
