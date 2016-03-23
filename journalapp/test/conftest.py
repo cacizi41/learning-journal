@@ -8,7 +8,7 @@ from journalapp.models import DBSession, Base, Entry
 
 # use these to initialize the app for testing
 
-TEST_AUTH_SECRET = os.environ.get('username', 'secret')
+# TEST_AUTH_SECRET = os.environ.get('username', 'secret')
 TEST_DATABASE_URL = 'sqlite:////tmp/test_db.sqlite'
 
 PARENT_DIR = os.path.dirname(__file__)

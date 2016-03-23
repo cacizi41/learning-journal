@@ -88,20 +88,28 @@ def edit_entry(request):
 
 
 # @view_config(route_name='login', renderer='templates/login.jinja2')
-# @forbidden_view_config(renderer='templates/login.jinja2')
 # def login(request):
 #     """User login."""
-#     username = request.params.get('username', None)
-#     password = request.params.get('password', None)
-#     if not (username and password):
+#     if request.method == 'POST':
+#         error = "Login Failed"
+#         authenticated = False
+#         username = request.params.get('username', None)
+#         password = request.params.get('password', None)
+#         if not (username and password):
 #         raise ValueError('both username and password are required')
 
-#     settings = request.registry.settings
-#     manager = BCRYPTPasswordManager()
-#     if username == settings.get('auth.username', ''):
-#         hashed = settings.get('auth.password', '')
-#         return manager.check(hashed, password)
-#     return False
+#         if check_password(password):
+#             headers = remember(request, username)
+#             return HTTPFound(location='/list', headers=headers)
+#         raise HTTPForbidden()
+#     raise ValueError('both username and password are required')
+
+    # settings = request.registry.settings
+    # manager = BCRYPTPasswordManager()
+    # if username == settings.get('auth.username', ''):
+    #     hashed = settings.get('auth.password', '')
+    #     return manager.check(hashed, password)
+    # return False
 
 # @view_config(route_name='logout', renderer='templates/logout.jinja2')
 # def login_view(request):

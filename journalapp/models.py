@@ -15,24 +15,18 @@ from sqlalchemy.orm import (
     sessionmaker,
 )
 
+from pyramid.security import (
+    Allow,
+    Everyone,
+    Authenticated,
+    )
+
 from zope.sqlalchemy import ZopeTransactionExtension
 
 import datetime
 
 DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
 Base = declarative_base()
-
-
-class MyModel(Base):
-    """Model MyModel."""
-
-    __tablename__ = 'models'
-    id = Column(Integer, primary_key=True)
-    name = Column(Text)
-    value = Column(Integer)
-
-Index('my_index', MyModel.name, unique=True, mysql_length=255)
-
 
 class Entry(Base):
     """Model Entry."""
@@ -45,8 +39,13 @@ class Entry(Base):
 
 
 class DefaultRoot(object):
+    """Default acl modle."""
     __acl__ = [
         (Allow, Everyone, 'view'),
         (Allow, Authenticated, 'add'),
         (Allow, Authenticated, 'edit')
         ]
+
+    def __init__(self, request):
+        pass
+
