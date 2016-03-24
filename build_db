@@ -1,2 +1,2 @@
 python setup.py develop
-initialize_learning_journal_db production.ini
+initialize_db production.ini
