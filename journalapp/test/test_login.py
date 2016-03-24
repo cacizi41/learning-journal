@@ -45,7 +45,6 @@ def test_access_to_add(app):
     """View permitted."""
     with pytest.raises(webtest.app.AppError):
         assert app.get('/add')
-# can't assert status code 403
 # raising at least one scoped session is already in present -v -s
 
 
@@ -84,6 +83,8 @@ def test_post_login_view(app, auth_env):
     user_input = {'username': 'admin', 'password': 'testpassword'}
     response = app.post('/login', user_input)
     assert response.status_code == 302
+    # failed 200
+    # 302 in console
 
 
 def test_post_login_fail(app, auth_env):

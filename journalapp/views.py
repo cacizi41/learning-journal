@@ -3,25 +3,18 @@ import os
 from jinja2 import Markup
 import transaction
 from pyramid.response import Response
-from pyramid.view import (
-    view_config,
-    forbidden_view_config,
-    )
-from .security import USERS
+from pyramid.view import view_config
+# from .security import USERS
 from pyramid.httpexceptions import HTTPFound
 from pyramid.authentication import AuthTktAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
-from cryptacular.bcrypt import BCRYPTPasswordManager
+# from cryptacular.bcrypt import BCRYPTPasswordManager
 from pyramid.security import remember, forget
 from sqlalchemy.exc import DBAPIError
-from pyramid.security import (
-    remember,
-    forget,
-    )
 from .models import (
     DBSession,
     Entry,
-    )
+)
 from journalapp.forms import EntryForm, LoginForm
 from .security import check_password
 import markdown
@@ -101,7 +94,7 @@ def login(request):
         authenticated_username = os.environ.get('AUTH_USERNAME', '')
         authenticated_password = os.environ.get('AUTH_PASSWORD', '')
         if username == authenticated_username:
-            if password == authenticated_password:
+            if check_password(password) is True:
                 headers = remember(request, username)
                 return HTTPFound(location='/', headers=headers)
             else:

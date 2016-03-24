@@ -6,16 +6,9 @@ USERS = {'editor': 'editor',
          'viewer': 'viewer'}
 
 
-# GROUPS = {'editor': ['group:editors']}
-
-
-# def groupfinder(username, request):
-#     """If user in editor, return group editor. Else, none. authn callback."""
-#     if username in USERS:
-#         return GROUPS.get(username, [])
-
-
 def check_password(password):
-    """check password."""
-    hashed = os.environ.get('AUTH_PASSWORD', 'default')
+    """Check password."""
+    secret = os.environ.get('AUTH_PASSWORD', 'default')
+    hashed = pwd_context.encrypt(secret)
     return pwd_context.verify(password, hashed)
+
