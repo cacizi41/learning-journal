@@ -18,15 +18,13 @@ def main(global_config, **settings):
     database_url = os.environ.get('DATABASE_URL', None)
     if database_url is not None:
         settings['sqlalchemy.url'] = database_url
-
     engine = engine_from_config(settings, 'sqlalchemy.')
     DBSession.configure(bind=engine)
     Base.metadata.bind = engine
     settings['auth.username'] = os.environ.get('AUTH_USERNAME', '')
     settings['auth.password'] = os.environ.get('AUTH_PASSWORD', '')
-    # auth_secret = os.environ.get('JOURNAL_AUTH_SECRET', 'supersecret')
-    authn_policy = AuthTktAuthenticationPolicy(
-        'sosecret', hashalg='sha512')
+    secret = os.environ.get('AUTH_SECRET', 'i dunno what this is')
+    authn_policy = AuthTktAuthenticationPolicy(secret)
     authz_policy = ACLAuthorizationPolicy()
     config = Configurator(root_factory=DefaultRoot, settings=settings)
     config.set_authentication_policy(authn_policy)

@@ -1,7 +1,7 @@
 """Initialize DB."""
 import os
 import sys
-# import transaction
+import transaction
 
 from sqlalchemy import engine_from_config
 
@@ -17,6 +17,8 @@ from ..models import (
     Base,
     # Entry,
 )
+
+from passlib.apps import custom_app_context as pwd_context
 
 
 def usage(argv):
@@ -40,10 +42,16 @@ def main(argv=sys.argv):
     database_url = os.environ.get('DATABASE_URL', None)
     if database_url is not None:
         settings['sqlalchemy.url'] = database_url
-
     engine = engine_from_config(settings, 'sqlalchemy.')
     DBSession.configure(bind=engine)
     Base.metadata.create_all(engine)
     # with transaction.manager:
-    #     model = MyModel(name='one', value=1)
-    #     DBSession.add(model)
+    #     password = os.environ.get('ADMIN_PASSWORD', 'admin')
+    #     encrypted = pwd_context.encrypt(password)
+    #     admin = User(username=u'admin', password=encrypted)
+    #     DBSession.add(admin)
+
+
+
+
+
