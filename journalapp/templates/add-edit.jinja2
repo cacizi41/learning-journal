@@ -10,7 +10,7 @@
             {% endif %}
         </p>
 
-    <div>{{form.text.label}}: {{form.text(rows = '20', cols = '100') | markdown}}</div>
+    <div>{{form.text.label}}: {{form.text(rows = '20', cols = '100')}}</div>
         <p class="errors">
             {% if form.text.errors %}
                 {{form.text.errors.pop()}}
